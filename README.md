@@ -38,3 +38,7 @@
 ## Установка зависимостей
 ```bash
 pip install -r requirements.txt
+```
+
+## Демонстрация на Streamlit (облегченная версия):
+https://my-ml-models.streamlit.app/

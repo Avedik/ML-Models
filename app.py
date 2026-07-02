@@ -70,69 +70,69 @@ if page == "1. Классификация":
             c_val = st.select_slider("Параметр регуляризации (C)", options=[0.01, 0.1, 1, 10, 100], value=1)
             model = LogisticRegression(C=c_val, solver='liblinear', random_state=42)
 
-with col2:
-    # Обучение модели
-    pipeline = Pipeline([
-        ('scaler', StandardScaler()),
-        ('classifier', model)
-    ])
-
-    pipeline.fit(X_train, y_train)
-
-    y_prob = pipeline.predict_proba(X_test)[:, 1]
-    y_pred = pipeline.predict(X_test)
-
-    auc = roc_auc_score(y_test, y_prob)
-    gini = 2 * auc - 1
-
-    st.metric("Коэффициент Джини (Gini)", f"{gini:.4f}")
-
-    # -------------------------------
-    # Построение границы решений
-    # -------------------------------
-    x_min, x_max = X_train[:, 0].min() - 1, X_train[:, 0].max() + 1
-    y_min, y_max = X_train[:, 1].min() - 1, X_train[:, 1].max() + 1
-
-    xx, yy = np.meshgrid(
-        np.linspace(x_min, x_max, 250),
-        np.linspace(y_min, y_max, 250)
-    )
-
-    grid = np.c_[xx.ravel(), yy.ravel()]
-    zz = pipeline.predict(grid)
-    zz = zz.reshape(xx.shape)
-
-    fig, ax = plt.subplots(figsize=(9, 5))
-
-    # Фон — области классификации
-    ax.contourf(
-        xx,
-        yy,
-        zz,
-        alpha=0.30,
-        cmap="coolwarm"
-    )
-
-    # Точки тестовой выборки
-    ax.scatter(
-        X_test[:, 0],
-        X_test[:, 1],
-        c=y_test,
-        cmap="coolwarm",
-        edgecolors="black",
-        s=45
-    )
-
-    ax.set_title(
-        f"{model_choice} (n_estimators={n_est})"
-        if model_choice == "Random Forest"
-        else f"{model_choice} (C={c_val})"
-    )
-
-    ax.set_xlabel("Feature 1")
-    ax.set_ylabel("Feature 2")
-
-    st.pyplot(fig)
+    with col2:
+        # Обучение модели
+        pipeline = Pipeline([
+            ('scaler', StandardScaler()),
+            ('classifier', model)
+        ])
+    
+        pipeline.fit(X_train, y_train)
+    
+        y_prob = pipeline.predict_proba(X_test)[:, 1]
+        y_pred = pipeline.predict(X_test)
+    
+        auc = roc_auc_score(y_test, y_prob)
+        gini = 2 * auc - 1
+    
+        st.metric("Коэффициент Джини (Gini)", f"{gini:.4f}")
+    
+        # -------------------------------
+        # Построение границы решений
+        # -------------------------------
+        x_min, x_max = X_train[:, 0].min() - 1, X_train[:, 0].max() + 1
+        y_min, y_max = X_train[:, 1].min() - 1, X_train[:, 1].max() + 1
+    
+        xx, yy = np.meshgrid(
+            np.linspace(x_min, x_max, 250),
+            np.linspace(y_min, y_max, 250)
+        )
+    
+        grid = np.c_[xx.ravel(), yy.ravel()]
+        zz = pipeline.predict(grid)
+        zz = zz.reshape(xx.shape)
+    
+        fig, ax = plt.subplots(figsize=(9, 5))
+    
+        # Фон — области классификации
+        ax.contourf(
+            xx,
+            yy,
+            zz,
+            alpha=0.30,
+            cmap="coolwarm"
+        )
+    
+        # Точки тестовой выборки
+        ax.scatter(
+            X_test[:, 0],
+            X_test[:, 1],
+            c=y_test,
+            cmap="coolwarm",
+            edgecolors="black",
+            s=45
+        )
+    
+        ax.set_title(
+            f"{model_choice} (n_estimators={n_est})"
+            if model_choice == "Random Forest"
+            else f"{model_choice} (C={c_val})"
+        )
+    
+        ax.set_xlabel("Feature 1")
+        ax.set_ylabel("Feature 2")
+    
+        st.pyplot(fig)
 
 # ==========================================
 # МОДУЛЬ 2: РЕГРЕССИЯ

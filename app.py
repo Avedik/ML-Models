@@ -70,7 +70,7 @@ if page == "1. Классификация":
             c_val = st.select_slider("Параметр регуляризации (C)", options=[0.01, 0.1, 1, 10, 100], value=1)
             model = LogisticRegression(C=c_val, solver='liblinear', random_state=42)
 
-    with col2:
+with col2:
     # Обучение модели
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
